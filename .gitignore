@@ -1,0 +1,17 @@
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+/*.DS_Store
+storage/*.key
+.env
+Homestead.yaml
+Homestead.json
+/.vagrant
+.phpunit.result.cache
+*.stub
+*.xlsx
+composer.lock
+/.idea
+/.vscode
+package-lock.json
