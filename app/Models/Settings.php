@@ -12,6 +12,7 @@ class Settings extends Model
     use HasFactory;
 
     protected $fillable = [
+        'key',
         'name',
         'value',
     ];

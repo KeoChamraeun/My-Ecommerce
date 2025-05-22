@@ -24,6 +24,8 @@ class Create extends Component
     public $image;
 
     public $blog;
+    public $listsForFields = [];
+
 
     public $listeners = ['createBlog'];
 
@@ -45,8 +47,7 @@ class Create extends Component
 
     public function render(): View|Factory
     {
-        // abort_if(Gate::denies('blog_create'), 403);
-
+        // dd($this->listsForFields);
         return view('livewire.admin.blog.create');
     }
 

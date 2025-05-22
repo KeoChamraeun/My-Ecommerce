@@ -28,7 +28,7 @@ class SuperUserSeeder extends Seeder
             'country'        => 'Morocco',
             'address'        => 'keochamraeun54@gmail.com',
             'phone'          => '0886576689',
-            'statut'         => 1,
+            'status'         => 1,
             'role_id'        => 1,
             'remember_token' => null,
             'created_at'     => now(),

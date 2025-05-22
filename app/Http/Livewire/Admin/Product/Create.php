@@ -143,6 +143,7 @@ class Create extends Component
         $this->product->description = $this->description;
 
         $this->product->save();
+        // dd($this->product);
 
         $this->alert('success', 'Product created successfully');
 

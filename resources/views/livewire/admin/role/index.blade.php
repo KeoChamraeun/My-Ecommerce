@@ -17,6 +17,7 @@
                 @endforeach
             </select>
         </div>
+
         <div class="lg:w-1/2 md:w-1/2 sm:w-full my-2 my-md-0">
             <input type="text" wire:model.debounce.300ms="search"
                 class="p-3 leading-5 bg-white text-gray-700 rounded border border-zinc-300 mb-1 text-sm w-full focus:shadow-outline-blue focus:border-blue-500"
@@ -39,31 +40,34 @@
                     {{ __('Actions') }}
                 </x-table.th>
             </x-slot>
+
             <x-table.tbody>
-                @forelse($roles as $id=>$role)
+                @forelse($roles as $id => $role)
                     <x-table.tr>
                         <x-table.td>
-                            {{$id}}
+                            {{ $id }}
                         </x-table.td>
+
                         <x-table.td>
                             {{ $role->name }}
                         </x-table.td>
-                        <x-table.td class="overflo-x-auto text-clip whitespace-pre" style="white-space: initial">
+
+                        <x-table.td class="overflow-x-auto text-clip whitespace-pre" style="white-space: initial">
                             @foreach($role->permissions as $permission)
-                                <x-badge info>
-                                    {{ $permission->title }}
-                                </x-badge>
+                                <x-badge info>{{ $permission->title }}</x-badge>
                             @endforeach
                         </x-table.td>
+
                         <x-table.td>
                             <div class="inline-flex">
-                                <x-button secondary href="">
+                                <x-button secondary href="#">
                                     {{ __('Edit') }}
-                                </a>
-                                <x-button danger type="button" wire:click="emit('deleteModal', {{ $role->id }})" 
+                                </x-button>
+
+                                <x-button danger type="button" wire:click="$emit('deleteModal', {{ $role->id }})"
                                     wire:loading.attr="disabled">
                                     {{ __('Delete') }}
-                                </button>
+                                </x-button>
                             </div>
                         </x-table.td>
                     </x-table.tr>
@@ -84,4 +88,3 @@
         </div>
     </div>
 </div>
-

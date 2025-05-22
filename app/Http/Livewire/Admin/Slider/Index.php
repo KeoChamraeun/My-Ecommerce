@@ -7,6 +7,7 @@ namespace App\Http\Livewire\Admin\Slider;
 use App\Http\Livewire\WithSorting;
 use App\Models\Language;
 use App\Models\Slider;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;

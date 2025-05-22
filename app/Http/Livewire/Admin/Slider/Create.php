@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Livewire\Admin\Slider;
 
 use App\Models\Language;
+use App\Models\Slider;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -56,7 +57,7 @@ class Create extends Component
 
         $this->resetValidation();
 
-        $this->slider = new PSliderage();
+        $this->slider = new Slider();
 
         $this->createSlider = true;
     }
