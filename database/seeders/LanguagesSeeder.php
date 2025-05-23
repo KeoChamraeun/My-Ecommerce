@@ -27,7 +27,7 @@ class LanguagesSeeder extends Seeder
             [
                 'id'         => 2,
                 'name'       => 'Khmer',
-                'code'       => 'ar',
+                'code'       => 'kh',
                 'status'     => 1,
                 'is_default' => 0,
             ],
