@@ -25,7 +25,7 @@ class SuperUserSeeder extends Seeder
             'zip'            => '12345',
             'city'           => 'Phnum Penh',
             'state'          => 'Phnum Penh',
-            'country'        => 'Morocco',
+            'country'        => 'Phnum Penh',
             'address'        => 'keochamraeun54@gmail.com',
             'phone'          => '0886576689',
             'status'         => 1,

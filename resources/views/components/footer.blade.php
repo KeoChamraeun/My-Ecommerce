@@ -40,23 +40,23 @@
                         <li class="mb-6">
                             <h4 class="mb-2 text-gray-50">{{ __('Telephone') }}</h4>
                             <a class="text-white hover:text-beige-400 hover:underline"
-                                href="tel:{{ Helpers::settings('company_phone') }}">
-                                {{ Helpers::settings('company_phone') }}
+                                href="0887567789">
+                                {{ __('0887567789') }}
                             </a>
                         </li>
                         <li class="mb-6">
                             <h4 class="mb-2 text-gray-50">{{ __('Email') }}</h4>
                             <a class="text-white hover:text-beige-400 hover:underline"
-                                href="mailto:{{ Helpers::settings('company_email_address') }}">
-                                {{ Helpers::settings('company_email_address') }}
+                                href="keochamraeun54@gmail">
+                                {{ 'keochamraeun54@gmail' }}
                             </a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <h4 class="mb-2 text-gray-50">{{ __('Whatsapp') }}</h4>
                             <a class="text-white hover:text-beige-400 hover:underline" href="#" target="_blank">
                                 {{ Helpers::settings('social_whatsapp') }}
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>
@@ -88,8 +88,7 @@
     </div>
     <div class="pt-5 flex items-center justify-center">
         <p class="inline-block text-sm text-gray-200">
-            <a class="uppercase hover:text-beige-500" href="https://behance.net/zakarialabib" target="_blank">handcrafted
-                by zakaria labib</a>
+            <a class="uppercase hover:text-beige-500" href="https://behance.net/zakarialabib" target="_blank">{{ __('KEO CHAMRAEUN') }}</a>
         </p>
     </div>
 </section>

@@ -13,15 +13,15 @@ class SettingSeeder extends Seeder
     protected $settings = [
         [
             'key'   => 'company_name',
-            'value' => 'AppEcom',
+            'value' => 'E-Commerce',
         ],
         [
             'key'   => 'company_email',
-            'value' => 'zakarialabib@gmail.com',
+            'value' => 'keochamraeun54@gmail.com',
         ],
         [
             'key'   => 'company_phone',
-            'value' => '+212638041919',
+            'value' => '+855 886576689',
         ],
         [
             'key'   => 'company_address',
@@ -35,10 +35,10 @@ class SettingSeeder extends Seeder
             'key'   => 'currency_code',
             'value' => 'MAD',
         ],
-      
+
         [
             'key'   => 'site_title',
-            'value' => 'AppEcom',
+            'value' => 'E-Commerce',
         ],
         [
             'key'   => 'site_logo',
@@ -62,11 +62,11 @@ class SettingSeeder extends Seeder
         ],
         [
             'key'   => 'seo_meta_title',
-            'value' => 'AppEcom',
+            'value' => 'E-Commerce',
         ],
         [
             'key'   => 'seo_meta_description',
-            'value' => 'AppEcom',
+            'value' => 'E-Commerce',
         ],
         [
             'key'   => 'social_facebook',

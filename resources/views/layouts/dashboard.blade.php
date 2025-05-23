@@ -19,7 +19,8 @@
 
 </head>
 
-<body class="antialiased bg-gray-50 text-body font-body">
+<body class="antialiased bg-gray-50 text-gray-800 font-{{ app()->getLocale() === 'kh' ? 'khmer' : 'sans'
+    }}">
     <x-loading-mask />
     <div @resize.window="handleWindowResize">
         <div class="min-h-screen">

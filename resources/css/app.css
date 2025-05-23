@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'KhmerOSBattambang';
+    src: url('/fonts/KhmerOS_battambang.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

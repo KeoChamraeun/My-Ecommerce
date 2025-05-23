@@ -1,18 +1,25 @@
 {
+  "fonts/KhmerOS_battambang.ttf": {
+    "file": "assets/KhmerOS_battambang-4d86384a.ttf",
+    "src": "fonts/KhmerOS_battambang.ttf"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-a125a2ab.css",
+    "file": "assets/app-121a3ebf.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
   "resources/js/app.css": {
-    "file": "assets/app-e351623f.css",
+    "file": "assets/app-7d9ff0a1.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
-    "css": [
-      "assets/app-e351623f.css"
+    "assets": [
+      "assets/KhmerOS_battambang-4d86384a.ttf"
     ],
-    "file": "assets/app-c611010a.js",
+    "css": [
+      "assets/app-7d9ff0a1.css"
+    ],
+    "file": "assets/app-1716299d.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

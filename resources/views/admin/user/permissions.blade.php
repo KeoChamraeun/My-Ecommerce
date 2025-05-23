@@ -36,12 +36,6 @@
                     </a>
                 </div>
             </div>
-            {{-- <div class="float-right">
-                <!-- Button trigger livewire modal -->
-                <x-button primary type="button" onclick="Livewire.emit('createSubcategory', 'show')">
-                    {{ __('Create') }}
-                </x-button>
-            </div> --}}
         </div>
     </section>
     <x-card>
