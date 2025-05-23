@@ -98,11 +98,18 @@ class DashboardController extends Controller
         return response()->json($msg);
     }
 
-    public function changeLanguage($locale)
+    public function changeLanguage(string $locale)
     {
-        Session::put('code', $locale);
-        $language = Session::get('code');
+        // Check if language exists and is active (assuming you have Language model with STATUS_ACTIVE)
+        $language = \App\Models\Language::where('code', $locale)
+            ->where('status', \App\Models\Language::STATUS_ACTIVE)
+            ->first();
+
+        if ($language) {
+            Session::put('language_code', $locale);
+        }
 
         return redirect()->back();
     }
+
 }

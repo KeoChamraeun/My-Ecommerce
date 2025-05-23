@@ -12,22 +12,9 @@ use Illuminate\Support\Facades\Session;
 
 class Locale
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Closure  $next
-     *
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
-        // Set config translatable.locales
         if (Schema::hasTable('languages')) {
-            $languages = Language::query()
-                ->where('status', Language::STATUS_ACTIVE)
-                ->get()->toArray();
-
             $language_default = Language::query()
                 ->where('is_default', Language::IS_DEFAULT)
                 ->first('code');
@@ -37,8 +24,10 @@ class Locale
 
         if ($language_code) {
             App::setLocale($language_code);
-        } else {
+        } elseif (!empty($language_default['code'])) {
             App::setLocale($language_default['code']);
+        } else {
+            App::setLocale(config('app.locale')); // fallback
         }
 
         return $next($request);
