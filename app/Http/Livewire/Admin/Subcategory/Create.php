@@ -64,9 +64,10 @@ class Create extends Component
 
         if ($this->image) {
             $imageName = Str::slug($this->subcategory->name).'-'.Str::random(3).'.'.$this->image->extension();
-            $this->image->storeAs('subcategories', $imageName);
-            $this->subcategory->image = $this->image->storeAs('subcategories', $imageName, 'public');
+            $path = $this->image->storeAs('subcategories', $imageName, 'public'); // store once, in 'public'
+            $this->subcategory->image = $path; // Save the relative path to DB
         }
+
 
         $this->subcategory->slug = Str::slug($this->subcategory->name);
 
