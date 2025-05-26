@@ -32,7 +32,7 @@ class Create extends Component
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
         'subcategory.language_id' => ['nullable'],
-        'image' => ['nullable', 'image', 'max:2048'], // 2MB max
+        // 'image' => ['nullable', 'image', 'max:2048'], // 2MB max
     ];
 
     public function render(): View|Factory
