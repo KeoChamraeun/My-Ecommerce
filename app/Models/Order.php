@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Support\HasAdvancedFilter;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\OrderStatus;
+use Faker\Provider\ar_EG\Address;
+use Google\Service\ShoppingContent\OrderTrackingSignal;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -60,7 +62,7 @@ class Order extends Model
     public static function generateReference()
     {
         $lastOrder = self::latest()->first();
-        $number = $lastOrder ? substr($lastOrder->reference, -6) + 1 : 1;
+        $number = $lastOrder ? (int) substr($lastOrder->reference, -6) + 1 : 1;
         return date('Ymd') . '-' . sprintf('%06d', $number);
     }
 
@@ -71,7 +73,7 @@ class Order extends Model
 
     public function tracks()
     {
-        return $this->hasMany(OrderTrack::class, 'order_id');
+        return $this->hasMany(OrderTrackingSignal::class, 'order_id');
     }
 
     public function user()
@@ -97,5 +99,20 @@ class Order extends Model
     public function order_products()
     {
         return $this->hasMany(OrderProduct::class);
+    }
+
+    // MANY-TO-MANY relationship to Products via pivot table 'order_products'
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'order_products')
+                    ->withPivot('quantity', 'price') // Add any other pivot fields if needed
+                    ->withTimestamps();
+    }
+
+    // Optional: define address relation if you are accessing $order->address
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'shipping_address_id');
+        // Adjust the foreign key as per your schema
     }
 }
