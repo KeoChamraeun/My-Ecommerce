@@ -50,7 +50,7 @@
                         <input type="checkbox" value="{{ $subcategory->id }}" wire:model="selected">
                     </x-table.td>
                     <x-table.td>
-                        <img src="{{ asset('images/subcategories/' . $subcategory->image) }}" alt="{{ $subcategory->name }}"
+                        <img src="{{ asset('images/livewire-tmp/' . $subcategory->image) }}" alt="{{ $subcategory->name }}"
                         class="w-10 h-10 rounded-full object-cover">
                     </x-table.td>
                     <x-table.td>
