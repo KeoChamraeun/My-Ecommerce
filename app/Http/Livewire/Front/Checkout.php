@@ -60,7 +60,12 @@ class Checkout extends Component
 
     public function getSubTotalProperty()
     {
-        return Cart::instance('shopping')->subtotal();
+        return floatval(preg_replace('/[^\d.]/', '', Cart::instance('shopping')->subtotal()));
+    }
+
+    public function getCartTotalProperty()
+    {
+        return floatval(preg_replace('/[^\d.]/', '', Cart::instance('shopping')->total()));
     }
 
     public function checkout()
@@ -119,7 +124,7 @@ class Checkout extends Component
             'phone' => $this->phone,
             'shipping_phone' => $this->phone,
             'total' => $this->cartTotal,
-            'subtotal' => Cart::instance('shopping')->subtotal(),
+            'subtotal' => floatval(preg_replace('/[^\d.]/', '', Cart::instance('shopping')->subtotal())),
             'tax' => 0,
             'user_id' => $user->id,
             'order_status' => Order::STATUS_PENDING,
@@ -171,14 +176,13 @@ class Checkout extends Component
 
     public function updateCartTotal()
     {
+        $total = floatval(preg_replace('/[^\d.]/', '', Cart::instance('shopping')->total()));
         if ($this->shipping_id) {
             $shipping = Shipping::find($this->shipping_id);
             $cost = $shipping->cost ?? 0;
-            $total = Cart::instance('shopping')->total();
-
             $this->cartTotal = $total + $cost;
         } else {
-            $this->cartTotal = Cart::instance('shopping')->total();
+            $this->cartTotal = $total;
         }
     }
 
@@ -224,11 +228,6 @@ class Checkout extends Component
     public function getShippingsProperty()
     {
         return Shipping::select('id', 'title', 'cost')->get();
-    }
-
-    public function getCartTotalProperty()
-    {
-        return Cart::instance('shopping')->total();
     }
 
     public function render(): View|Factory
