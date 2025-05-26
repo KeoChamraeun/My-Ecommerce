@@ -32,7 +32,7 @@ class Create extends Component
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
         'subcategory.language_id' => ['nullable'],
-        'image' => ['nullable', 'image', 'max:2048'], // 2MB max
+        'image'                   => ['nullable', 'file', 'image', 'max:2048'], // max 2MB image file
     ];
 
     public function render(): View|Factory
@@ -55,6 +55,11 @@ class Create extends Component
 
     public function create()
     {
+        if ($this->image) {
+            info('Image upload exists:', ['image' => $this->image]);
+        } else {
+            info('No image uploaded');
+        }
         $this->validate();
 
         if ($this->image) {
