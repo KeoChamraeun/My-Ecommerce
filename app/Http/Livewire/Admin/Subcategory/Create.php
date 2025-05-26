@@ -55,7 +55,7 @@ class Create extends Component
 
     public function create()
     {
-        // $this->validate();
+        $this->validate();
 
         if ($this->image) {
             $imageName = Str::slug($this->subcategory->name).'-'.Str::random(3).'.'.$this->image->extension();
