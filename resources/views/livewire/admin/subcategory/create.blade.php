@@ -24,7 +24,7 @@
                             class="block bg-white text-gray-700 rounded border border-gray-300 mb-1 text-sm w-full focus:shadow-outline-blue focus:border-blue-500"
                             wire:model="subcategory.category_id">
                             <option value="">{{ __('Select Category') }}</option>
-                            @foreach ($this->categories as $category)
+                            @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
@@ -38,7 +38,7 @@
                             class="block bg-white text-gray-700 rounded border border-gray-300 mb-1 text-sm w-full focus:shadow-outline-blue focus:border-blue-500"
                             wire:model="subcategory.language_id">
                             <option value="">{{ __('Select Language') }}</option>
-                            @foreach ($this->languages as $language)
+                            @foreach ($languages as $language)
                                 <option value="{{ $language->id }}">{{ $language->name }}</option>
                             @endforeach
                         </select>

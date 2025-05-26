@@ -1,8 +1,15 @@
 <div>
+    <!-- Create Button -->
+    <div class="mb-4">
+        <x-button primary wire:click="createSubcategory" wire:loading.attr="disabled">
+            {{ __('Create New Subcategory') }}
+        </x-button>
+    </div>
+
     <div class="flex flex-wrap justify-center">
         <div class="lg:w-1/2 md:w-1/2 sm:w-full flex flex-col my-md-0 my-2">
             <div class="my-2 my-md-0">
-                <p class="leading-5 text-black mb-1 text-sm ">
+                <p class="leading-5 text-black mb-1 text-sm">
                     {{ __('Show items per page') }}
                 </p>
                 <select wire:model="perPage" name="perPage"
@@ -22,7 +29,6 @@
         </div>
     </div>
 
-
     <x-table>
         <x-slot name="thead">
             <x-table.th>
@@ -38,7 +44,6 @@
             <x-table.th>
                 {{ __('Category') }}
             </x-table.th>
-
             <x-table.th>
                 {{ __('Actions') }}
             </x-table.th>
@@ -50,14 +55,18 @@
                         <input type="checkbox" value="{{ $subcategory->id }}" wire:model="selected">
                     </x-table.td>
                     <x-table.td>
-                        <img src="{{ asset('images/subcategories/' . $subcategory->image) }}" alt="{{ $subcategory->name }}"
-                        class="w-10 h-10 rounded-full object-cover">
+                        @if ($subcategory->image)
+                            <img src="{{ asset('storage/' . $subcategory->image) }}" alt="{{ $subcategory->name }}"
+                                class="w-10 h-10 rounded-full object-cover">
+                        @else
+                            {{ __('No Image') }}
+                        @endif
                     </x-table.td>
                     <x-table.td>
                         {{ $subcategory->name }}
                     </x-table.td>
                     <x-table.td>
-                        {{ $subcategory->category?->name }}
+                        {{ $subcategory->category?->name ?? __('No Category') }}
                     </x-table.td>
                     <x-table.td>
                         <div class="flex justify-start space-x-2">
@@ -95,12 +104,8 @@
             {{ $subcategories->links() }}
         </div>
     </div>
-    
-    <!-- Edit Modal -->
-    
-    @livewire('admin.subcategory.edit', ['subcategory'=>$subcategory])
-    
-    <!-- End Edit Modal -->
 
-    <livewire:admin.subcategory.create />
+    <!-- Include Create and Edit Components -->
+    @livewire('admin.subcategory.create')
+    @livewire('admin.subcategory.edit', ['subcategory' => $subcategory])
 </div>

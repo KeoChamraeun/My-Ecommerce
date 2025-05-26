@@ -4,93 +4,74 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire\Admin\Subcategory;
 
-use Livewire\Component;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Gate;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
-use App\Models\Subcategory;
 use App\Models\Category;
 use App\Models\Language;
-use Illuminate\Support\Facades\Storage; // Add this import
+use App\Models\Subcategory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
     use LivewireAlert;
     use WithFileUploads;
 
-    public $editModal = false;
+    public $editSubcategory = false;
+    public $listeners = ['editModal'];
 
-    public $subcategory;
-
+    public ?Subcategory $subcategory;
     public $image;
 
-    public $listeners = [
-        'editModal',
-    ];
-
-    public array $rules = [
+    protected array $rules = [
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
-        'subcategory.language_id' => ['nullable'],
-        'subcategory.slug'        => ['required'],
+        'subcategory.language_id' => ['nullable', 'integer'],
+        'image'                   => ['nullable', 'image', 'max:2048'],
     ];
 
-    public function editModal($subcategory)
+    public function render(): View|Factory
     {
-        abort_if(Gate::denies('subcategory_update'), 403);
+        abort_if(Gate::denies('subcategory_edit'), 403);
 
-        $this->resetErrorBag();
-
-        $this->resetValidation();
-
-        $this->subcategory = Subcategory::findOrFail($subcategory);
-
-        $this->editModal = true;
+        return view('livewire.admin.subcategory.edit', [
+            'categories' => Category::select('name', 'id')->get(),
+            'languages' => Language::select('name', 'id')->get(),
+        ]);
     }
 
-    public function update()
+    public function editModal($subcategoryId): void
     {
-        abort_if(Gate::denies('subcategory_update'), 403);
+        $this->resetErrorBag();
+        $this->resetValidation();
 
+        $this->subcategory = Subcategory::findOrFail($subcategoryId);
+        $this->image = null;
+        $this->editSubcategory = true;
+    }
+
+    public function update(): void
+    {
         $this->validate();
 
-        if ($this->image) {
-            $imageName = Str::slug($this->subcategory->name).'-'.Str::random(3).'.'.$this->image->extension();
+        $this->subcategory->slug = Str::slug($this->subcategory->name);
 
-            $img = Image::make($this->image->getRealPath())->encode('webp', 85);
-
-            $img->stream();
-
-            Storage::disk('local_files')->put('subcategories/'.$imageName, $img, 'public');
-
-            // Removed $this->brand->image = $imageName; as it seems to be a mistake
-            $this->subcategory->image = $imageName;
+        if ($this->image && $this->image->isValid()) {
+            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->getClientOriginalExtension();
+            $path = $this->image->storeAs('subcategories', $imageName, 'public');
+            $this->subcategory->image = $path;
         }
 
         $this->subcategory->save();
 
-        $this->alert('success', __('Subcategory updated successfully'));
-
+        $this->alert('success', __('Subcategory updated successfully.'));
         $this->emit('refreshIndex');
 
-        $this->editModal = false;
-    }
-
-    public function getCategoriesProperty()
-    {
-        return Category::select('name', 'id')->get();
-    }
-
-    public function getLanguagesProperty()
-    {
-        return Language::select('name', 'id')->get();
-    }
-
-    public function render(): View
-    {
-        return view('livewire.admin.subcategory.edit');
+        $this->editSubcategory = false;
+        $this->subcategory = null;
+        $this->image = null;
     }
 }
