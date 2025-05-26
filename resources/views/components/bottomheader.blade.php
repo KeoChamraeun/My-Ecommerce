@@ -5,13 +5,13 @@
             @foreach (\App\Helpers::getActiveCategories() as $category)
                 <a href="{{ route('front.categories') }}?c={{ $category->id }}"
                     class="lg:text-md md:text-sm text-center uppercase font-semibold font-heading hover:text-beige-400 hover:underline">
-                    {{ get_name_translation($category) }}
+                    {{ $category->name }}
                 </a>
             @endforeach
             <button type="button"
                 class="lg:text-md md:text-sm text-center uppercase font-semibold font-heading hover:text-beige-400 hover:underline"
                 x-on:click="isMenuOpen = !isMenuOpen" @mouseenter="isMenuOpen = true" @click.away="isMenuOpen = false">
-                {{ __('Brands') }} <small class="inline-block align-middle text-gray-600 opacity-75">▼</small>
+                {{ 'Brands' }} <small class="inline-block align-middle text-gray-600 opacity-75">▼</small>
             </button>
         </div>
         <div class="absolute z-10 top-full left-0 w-full max-w-screen-xl bg-white rounded-md shadow-lg"
