@@ -4,95 +4,93 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire\Admin\Subcategory;
 
-use App\Models\Category;
-use App\Models\Language;
-use App\Models\Subcategory;
-use Illuminate\Contracts\View\Factory;
+use Livewire\Component;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-use Livewire\Component;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
+use App\Models\Subcategory;
+use App\Models\Category;
+use App\Models\Language;
+use Illuminate\Support\Facades\Storage; // Add this import
 
 class Edit extends Component
 {
     use LivewireAlert;
     use WithFileUploads;
 
-    public $editSubcategory = false;
-    public $listeners = ['editModal'];
+    public $editModal = false;
 
-    public ?Subcategory $subcategory;
+    public $subcategory;
+
     public $image;
 
-    protected array $rules = [
-        'subcategory.name'        => ['required', 'string', 'max:255'],
-        'subcategory.category_id' => ['nullable', 'integer'],
-        'subcategory.language_id' => ['nullable', 'integer'],
-        'image'                   => ['nullable', 'image', 'max:2048'],
+    public $listeners = [
+        'editModal',
     ];
 
-    public function render(): View|Factory
-    {
-        abort_if(Gate::denies('subcategory_edit'), 403);
+    public array $rules = [
+        'subcategory.name'        => ['required', 'string', 'max:255'],
+        'subcategory.category_id' => ['nullable', 'integer'],
+        'subcategory.language_id' => ['nullable'],
+        'subcategory.slug'        => ['required'],
+    ];
 
-        return view('livewire.admin.subcategory.edit', [
-            'categories' => Category::select('name', 'id')->get(),
-            'languages' => Language::select('name', 'id')->get(),
-        ]);
-    }
-
-    public function editModal($subcategoryId): void
+    public function editModal($subcategory)
     {
+        abort_if(Gate::denies('subcategory_update'), 403);
+
         $this->resetErrorBag();
+
         $this->resetValidation();
 
-        $this->subcategory = Subcategory::findOrFail($subcategoryId);
-        $this->image = null;
-        $this->editSubcategory = true;
+        $this->subcategory = Subcategory::findOrFail($subcategory);
+
+        $this->editModal = true;
     }
 
-    public function update(): void
+    public function update()
     {
+        abort_if(Gate::denies('subcategory_update'), 403);
+
         $this->validate();
 
-        $this->subcategory->slug = Str::slug($this->subcategory->name);
+        if ($this->image) {
+            $imageName = Str::slug($this->subcategory->name).'-'.Str::random(3).'.'.$this->image->extension();
 
-        if ($this->image instanceof \Livewire\TemporaryUploadedFile && $this->image->isValid()) {
-            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.webp';
+            $img = Image::make($this->image->getRealPath())->encode('webp', 85);
 
-            try {
-                // Use Intervention Image to encode as webp
-                $image = Image::make($this->image->get())->encode('webp', 85);
+            $img->stream();
 
-                $path = 'subcategories/' . $imageName;
+            Storage::disk('local_files')->put('subcategories/'.$imageName, $img, 'public');
 
-                // Store the encoded image to the 'public' disk
-                Storage::disk('public')->put($path, $image);
-
-                $this->subcategory->image = $path;
-
-                Log::info('Image processed and stored', ['path' => $path]);
-
-            } catch (\Exception $e) {
-                Log::error('Failed to process/store image', ['error' => $e->getMessage()]);
-                $this->alert('error', __('Failed to process image.'));
-                return;
-            }
+            // Removed $this->brand->image = $imageName; as it seems to be a mistake
+            $this->subcategory->image = $imageName;
         }
 
         $this->subcategory->save();
 
-        $this->alert('success', __('Subcategory updated successfully.'));
+        $this->alert('success', __('Subcategory updated successfully'));
+
         $this->emit('refreshIndex');
 
-        // Reset the modal
-        $this->editSubcategory = false;
-        $this->subcategory = null;
-        $this->image = null;
+        $this->editModal = false;
+    }
+
+    public function getCategoriesProperty()
+    {
+        return Category::select('name', 'id')->get();
+    }
+
+    public function getLanguagesProperty()
+    {
+        return Language::select('name', 'id')->get();
+    }
+
+    public function render(): View
+    {
+        return view('livewire.admin.subcategory.edit');
     }
 }

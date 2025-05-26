@@ -10,7 +10,6 @@ use App\Models\Subcategory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -21,74 +20,57 @@ class Create extends Component
     use LivewireAlert;
     use WithFileUploads;
 
-    public $createSubcategory = false;
+    public $createSubcategory;
+
     public $listeners = ['createSubcategory'];
 
-    public ?Subcategory $subcategory = null;
+    public $subcategory;
+
     public $image;
 
-    protected array $rules = [
+    public array $rules = [
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
-        'subcategory.language_id' => ['nullable', 'integer'],
-        'image'                   => ['nullable', 'image', 'max:2048'],
+        'subcategory.language_id' => ['nullable'],
     ];
 
     public function render(): View|Factory
     {
         abort_if(Gate::denies('subcategory_create'), 403);
 
-        return view('livewire.admin.subcategory.create', [
-            'categories' => $this->categories,
-            'languages' => $this->languages,
-        ]);
+        return view('livewire.admin.subcategory.create');
     }
 
-    public function createSubcategory(): void
+    public function createSubcategory()
     {
         $this->resetErrorBag();
+
         $this->resetValidation();
 
         $this->subcategory = new Subcategory();
-        $this->image = null;
+
         $this->createSubcategory = true;
     }
 
-    public function create(): void
+    public function create()
     {
         $this->validate();
 
-        Log::info('Create method called', [
-            'image_exists' => !empty($this->image),
-            'image_type' => is_object($this->image) ? get_class($this->image) : 'null',
-            'image_valid' => $this->image instanceof \Livewire\TemporaryUploadedFile ? $this->image->isValid() : false,
-        ]);
+        if ($this->image) {
+            $imageName = Str::slug($this->subcategory->name).'-'.Str::random(3).'.'.$this->image->extension();
+            $this->image->storeAs('subcategories', $imageName);
+            $this->subcategory->image = $imageName;
+        }
 
         $this->subcategory->slug = Str::slug($this->subcategory->name);
-
-        if ($this->image instanceof \Livewire\TemporaryUploadedFile && $this->image->isValid()) {
-            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->getClientOriginalExtension();
-            try {
-                $path = $this->image->storeAs('subcategories', $imageName, 'public');
-                $this->subcategory->image = $path;
-                Log::info('Image stored successfully', ['path' => $path]);
-            } catch (\Exception $e) {
-                Log::error('Failed to store image', ['error' => $e->getMessage()]);
-                $this->alert('error', __('Failed to store image.'));
-                return;
-            }
-        } else {
-            Log::info('No valid image uploaded');
-        }
 
         $this->subcategory->save();
 
         $this->alert('success', __('Subcategory created successfully.'));
+
         $this->emit('refreshIndex');
 
         $this->createSubcategory = false;
-        $this->subcategory = null;
-        $this->image = null;
     }
 
     public function getCategoriesProperty()

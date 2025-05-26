@@ -28,7 +28,11 @@ class Index extends Component
 
     public $subcategory;
 
-    public bool $deleteModal = false;
+    public $deleteModal = false;
+
+    public $refreshIndex;
+
+    public $image;
 
     public array $orderable;
 
@@ -86,8 +90,6 @@ class Index extends Component
 
     public function render(): View|Factory
     {
-        abort_if(Gate::denies('subcategory_access'), 403);
-
         $query = Subcategory::with('category')->advancedFilter([
             's'               => $this->search ?: null,
             'order_column'    => $this->sortBy,
@@ -99,16 +101,18 @@ class Index extends Component
         return view('livewire.admin.subcategory.index', compact('subcategories'));
     }
 
-    public function deleteModal($subcategoryId)
+
+
+    public function deleteModal($subcategory)
     {
         $this->confirm(__('Are you sure you want to delete this?'), [
             'toast'             => false,
             'position'          => 'center',
             'showConfirmButton' => true,
             'cancelButtonText'  => __('Cancel'),
-            'onConfirmed'       => 'delete',
+            'onConfirmed' => 'delete',
         ]);
-        $this->subcategory = $subcategoryId;
+        $this->subcategory = $subcategory;
     }
 
     public function delete()
@@ -118,11 +122,8 @@ class Index extends Component
         Subcategory::findOrFail($this->subcategory)->delete();
 
         $this->alert('success', __('Subcategory deleted successfully.'));
-        $this->deleteModal = false;
     }
 
-    public function createSubcategory()
-    {
-        $this->emit('createSubcategory');
-    }
+
+
 }
