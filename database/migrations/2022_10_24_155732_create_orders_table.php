@@ -21,17 +21,18 @@ return new class () extends Migration {
             $table->foreignId('shipping_id')->nullable()->constrained('shippings')->nullOnDelete();
             $table->foreignId('packaging_id')->nullable()->constrained('packagings')->nullOnDelete();
             $table->string('reference');
-            $table->string('status')->default(true);
+            $table->string('status')->default('pending');
             $table->json('cart')->nullable();
             $table->string('delivery_method');
             $table->string('payment_method');
-            $table->integer('totalQty')->default(false);
-            $table->string('payment_status')->default(false);
+            $table->integer('totalQty')->default(0);
+            $table->string('payment_status')->default('unpaid');
             $table->text('order_note')->nullable();
             $table->json('products')->nullable();
-            $table->decimal('total', 10, 2)->default(false);
-            $table->decimal('subtotal', 10, 2)->default(false);
-            $table->decimal('tax', 10, 2)->default(false);
+            $table->decimal('total', 10, 2)->default(0.00);
+            $table->decimal('subtotal', 10, 2)->default(0.00);
+            $table->decimal('tax', 10, 2)->default(0.00);
+            $table->decimal('shipping_cost', 10, 2)->default(0.00); // added missing column
             $table->string('shipping_name')->nullable();
             $table->string('shipping_email')->nullable();
             $table->string('shipping_phone')->nullable();

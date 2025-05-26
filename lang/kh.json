@@ -695,5 +695,12 @@
     "Your cart is empty": "កន្ត្រករបស់អ្នកទទេ",
     "Your password has been reset!": "ពាក្យសម្ងាត់របស់អ្នកបានកំណត់ឡើងវិញ!",
     "Your subscription is active.": "ការជាវរបស់អ្នកសកម្ម។",
-    "Your subscription is inactive.": "ការជាវរបស់អ្នកមិនសកម្ម។"
+    "Your subscription is inactive.": "ការជាវរបស់អ្នកមិនសកម្ម។",
+    "Permission Details":"ព័ត៌មានលម្អិតអំពីការអនុញ្ញាត",
+    "ID":"លេខសម្គាល់",
+    "Guard":"យាម",
+    "Created At":"បានបង្កើតនៅ",
+    "Updated At":"ធ្វើបច្ចុប្បន្នភាពនៅ",
+    "N/A":"គ្មាន",
+    "Phnum Penh":"ក្រុងភ្នំពេញ"
 }

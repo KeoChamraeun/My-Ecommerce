@@ -22,7 +22,6 @@ class Product extends Model implements Buyable
     use HasFactory;
 
     public const StatusInActive = 0;
-
     public const StatusActive = 1;
 
     public $orderable = [
@@ -77,14 +76,9 @@ class Product extends Model implements Buyable
         'discount_date',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'subcategories' => 'array',
-        'options'       => 'array',
+        'options' => 'array',
     ];
 
     public function setNameAttribute($value)
@@ -98,7 +92,6 @@ class Product extends Model implements Buyable
         if ($this->old_price) {
             return round(($this->old_price - $this->price) / $this->old_price * 100);
         }
-
         return null;
     }
 
@@ -117,37 +110,16 @@ class Product extends Model implements Buyable
         return $this->belongsToMany(Subcategory::class);
     }
 
-    /**
-     * Scope a query to only include the product with the highest price.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeHighestPrice($query)
     {
         return $query->orderBy('price', 'desc')->first();
     }
 
-    /**
-     * Scope a query to only include the product with the lowest price.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeLowestPrice($query)
     {
         return $query->orderBy('price', 'asc')->first();
     }
 
-    /**
-     * Scope a query to only include active products.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     *
-     * @return void
-     */
     public function scopeActive($query)
     {
         $query->where('status', 1);
@@ -158,7 +130,6 @@ class Product extends Model implements Buyable
         return $this->hasMany(Review::class);
     }
 
-    // Product model
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_products')->withPivot('qty', 'price', 'tax', 'total');

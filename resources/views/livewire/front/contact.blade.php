@@ -27,7 +27,7 @@
                         <h4 class="font-bold text-black text-xl mb-1">
                             {{ __('Our Location') }}</h4>
                         <p class="text-base text-body-color ">
-                            {{ Helpers::settings('address') }}
+                            {{ __('Phnum Penh') }}
                         </p>
                     </div>
                 </div>
@@ -65,16 +65,16 @@
                             {{ __('Email Address') }}
                         </h4>
                         <p class="text-bas  text-body-color"><a
-                                href="mailto:{{ Helpers::settings('company_email_address') }}">{{ Helpers::settings('company_email_address') }}</a>
+                                href="keochamraeun54@gmail.com">{{ __('keochamraeun54@gmail.com') }}</a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="w-full lg:w-1/2 xl:w-6/12 px-8">
-            <div class="rounded-lg shadow-lg">
+            {{-- <div class="rounded-lg shadow-lg">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13297.411236160367!2d-7.6295218!3d33.5701878!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x8d0b12bd9b88d0cb!2sBadr%20Luxury!5e0!3m2!1sen!2sma!4v1672402258196!5m2!1sen!2sma" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

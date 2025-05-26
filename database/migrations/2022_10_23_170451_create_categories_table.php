@@ -17,6 +17,7 @@ return new class () extends Migration {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('name_translate');
             $table->string('image')->nullable();
             $table->tinyInteger('status')->default(true);
             $table->softDeletes();

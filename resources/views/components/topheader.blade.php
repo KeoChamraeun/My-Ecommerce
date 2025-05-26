@@ -2,7 +2,7 @@
     <div class="flex items-center justify-between">
         <p
             class="text-xs text-center font-semibold font-heading text-white hover:text-beige-200 hover:underline transition ease-in duration-300">
-            BADR LUXURY - SINCE 1983 - THE BEST OF EVERYTHING
+            {{ __('My_E-Commerce WebSite') }}
         </p>
         <div class="w-auto flex space-x-3">
             <a class="inline-flex items-center justify-center w-5 h-5 rounded-full"

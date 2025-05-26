@@ -88,7 +88,10 @@
     </div>
     <div class="pt-5 flex items-center justify-center">
         <p class="inline-block text-sm text-gray-200">
-            <a class="uppercase hover:text-beige-500" href="https://behance.net/zakarialabib" target="_blank">{{ __('KEO CHAMRAEUN') }}</a>
+            {{-- <a class="uppercase hover:text-beige-500" href="https://behance.net/zakarialabib" target="_blank">{{ __('KEO CHAMRAEUN') }}</a> --}}
+            <a class="uppercase hover:text-beige-500"
+                target="_blank">{{ __('KEO CHAMRAEUN') }}</a>
+
         </p>
     </div>
 </section>

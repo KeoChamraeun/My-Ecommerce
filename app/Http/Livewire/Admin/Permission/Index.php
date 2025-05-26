@@ -13,15 +13,18 @@ class Index extends Component
     public $perPage = 10;
     public $paginationOptions = [5, 10, 25, 50];
     public $search = '';
-    public $sortField = 'title'; // Use 'title' instead of 'name'
+    public $sortField = 'title';
     public $sortDirection = 'asc';
     public $selected = [];
+    public $deleteId = null;
 
     protected $queryString = [
         'search' => ['except' => ''],
         'sortField' => ['except' => 'title'],
         'sortDirection' => ['except' => 'asc'],
     ];
+
+    protected $listeners = ['delete', 'deleteSelected'];
 
     public function updatingSearch()
     {
@@ -38,16 +41,28 @@ class Index extends Component
         }
     }
 
-    public function confirm($action, $permissionId = null)
+    public function confirmDelete($action, $id = null)
     {
-        if ($action === 'delete' && $permissionId) {
-            Permission::find($permissionId)->delete();
-            $this->dispatchBrowserEvent('alert', ['message' => 'Permission deleted successfully!']);
-        } elseif ($action === 'deleteSelected') {
-            Permission::whereIn('id', $this->selected)->delete();
+        // Emit event to JS to open SweetAlert confirm popup
+        $this->deleteId = $id;
+        $this->emit('confirmDelete', $action, $id);
+    }
+
+    public function delete()
+    {
+        if ($this->deleteId) {
+            Permission::findOrFail($this->deleteId)->delete();
+            $this->deleteId = null;
+            session()->flash('message', __('Permission deleted successfully!'));
             $this->selected = [];
-            $this->dispatchBrowserEvent('alert', ['message' => 'Selected permissions deleted successfully!']);
         }
+    }
+
+    public function deleteSelected()
+    {
+        Permission::whereIn('id', $this->selected)->delete();
+        $this->selected = [];
+        session()->flash('message', __('Selected permissions deleted successfully!'));
     }
 
     public function getSelectedCountProperty()
@@ -58,14 +73,16 @@ class Index extends Component
     public function render()
     {
         $permissions = Permission::query()
-            ->when($this->search, function ($query) {
-                $query->where('title', 'like', '%' . $this->search . '%');
-            })
+            ->when($this->search, fn($query) =>
+                $query->where('title', 'like', '%' . $this->search . '%')
+            )
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
         return view('livewire.admin.permission.index', [
             'permissions' => $permissions,
+            'sorts' => [$this->sortField => $this->sortDirection],
+            'selectedCount' => $this->selectedCount,  // <--- pass this here
         ]);
     }
 }

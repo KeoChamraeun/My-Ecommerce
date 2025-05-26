@@ -25,36 +25,63 @@
         <x-language-dropdown />
 
         <ul class="flex-col md:flex-row list-none items-center md:flex">
-            <x-dropdown align="right" width="60">
-                <x-slot name="trigger">
-                    <x-button type="button" primary>
-                        {{ Auth::user()->first_name }}
-                    </x-button>
-                </x-slot>
+            <div x-data="{ open: false }" class="relative">
+                <button
+                    @click="open = !open"
+                    @click.outside="open = false"
+                    type="button"
+                    class="flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                    aria-haspopup="true"
+                    :aria-expanded="open"
+                >
+                    <i class="fa fa-user mr-2"></i> <!-- Icon for the trigger button -->
+                    {{ Auth::user()->first_name }}
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
 
-                <x-slot name="content">
-                    <x-dropdown-link :href="route('admin.settings')">
-                        {{ __('Settings') }}
-                    </x-dropdown-link>
-
-                    <x-dropdown-link>
-                        @livewire('admin.cache')
-                    </x-dropdown-link>
-
-                    <div class="border-t border-gray-100"></div>
-
-                    <!-- Authentication -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-dropdown-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-dropdown-link>
-                    </form>
-                </x-slot>
-            </x-dropdown>
+                <div
+                    x-show="open"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="absolute right-0 mt-2 w-60 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+                >
+                    <div class="py-1">
+                        <a
+                            href="{{ route('admin.settings') }}"
+                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-150"
+                        >
+                            <i class="fa fa-cog mr-2"></i>
+                            {{ __('Settings') }}
+                        </a>
+                        <div
+                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-150"
+                        >
+                            <i class="fa fa-trash mr-2"></i>
+                            @livewire('admin.cache')
+                        </div>
+                        <div class="border-t border-gray-100"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-150"
+                            >
+                                <i class="fa fa-sign-out-alt mr-2"></i>
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </ul>
+
+
     </div>
 </nav>
 

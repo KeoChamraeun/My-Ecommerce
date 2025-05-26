@@ -18,36 +18,25 @@ class ProductShow extends Component
     use LivewireAlert;
 
     public $product;
-
     public $relatedProducts;
-
     public $brand;
-
     public $category;
-
     public $quantity = 1;
-
     public $product_id;
-
     public $product_name;
-
     public $product_price;
-
     public $product_qty;
-
     public $brand_products;
 
     public $listeners = [
         'AddToCart',
     ];
 
-    public $decreaseQuantity;
-
-    public $increaseQuantity;
-
     public function decreaseQuantity()
     {
-        $this->quantity -= 1;
+        if ($this->quantity > 1) {
+            $this->quantity -= 1;
+        }
     }
 
     public function increaseQuantity()
@@ -55,45 +44,49 @@ class ProductShow extends Component
         $this->quantity += 1;
     }
 
-     public function AddToCart($product_id)
-     {
-         $product = Product::find($product_id);
+    public function AddToCart($product_id)
+    {
+        $product = Product::find($product_id);
+        if (!$product) {
+            $this->alert('error', __('Product not found!'));
+            return;
+        }
 
-         $this->product_id = $product->id;
-         $this->product_name = $product->name;
-         $this->product_price = $product->price;
-         $this->product_qty = $this->quantity;
+        $this->product_id = $product->id;
+        $this->product_name = $product->name;
+        $this->product_price = $product->price;
+        $this->product_qty = $this->quantity;
 
-         Cart::instance('shopping')->add($this->product_id, $this->product_name, $this->product_qty, $this->product_price)->associate('App\Models\Product');
+        Cart::instance('shopping')->add(
+            $this->product_id,
+            $this->product_name,
+            $this->product_qty,
+            $this->product_price
+        )->associate('App\Models\Product');
 
-         $this->emit('cartCountUpdated');
+        $this->emit('cartCountUpdated');
 
-         $this->alert(
-             'success',
-             __('Product added to cart successfully!'),
-             [
-                 'position'          => 'center',
-                 'timer'             => 3000,
-                 'toast'             => true,
-                 'text'              => '',
-                 'confirmButtonText' => 'Ok',
-                 'cancelButtonText'  => 'Cancel',
-                 'showCancelButton'  => false,
-                 'showConfirmButton' => false,
-             ]
-         );
-     }
+        $this->alert(
+            'success',
+            __('Product added to cart successfully!'),
+            [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+                'text' => '',
+                'confirmButtonText' => 'Ok',
+                'cancelButtonText' => 'Cancel',
+                'showCancelButton' => false,
+                'showConfirmButton' => false,
+            ]
+        );
+    }
 
     public function mount(Product $product)
     {
         $this->product = $product;
-
         $this->brand_products = Product::active()->where('brand_id', $product->brand_id)->take(3)->get();
-        $this->relatedProducts = Product::active()
-            ->inRandomOrder()
-            ->limit(4)
-            ->get();
-
+        $this->relatedProducts = Product::active()->inRandomOrder()->limit(4)->get();
         $this->brand = Brand::where('id', $product->brand_id)->first();
         $this->category = Category::where('id', $product->category_id)->first();
     }

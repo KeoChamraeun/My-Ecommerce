@@ -1,110 +1,131 @@
 <div>
-    <div class="flex flex-wrap justify-center">
-        <div class="lg:w-1/2 md:w-1/2 sm:w-full flex flex-wrap my-md-0 my-2">
+    {{-- Controls --}}
+    <div class="flex flex-wrap justify-center mb-4">
+        <div class="lg:w-1/2 md:w-1/2 sm:w-full flex items-center gap-3">
             <select wire:model="perPage"
-                class="w-20 block p-3 leading-5 bg-white text-gray-700 rounded border border-zinc-300 mb-1 text-sm focus:shadow-outline-blue focus:border-blue-300 mr-3">
+                class="w-20 p-2 border border-gray-300 rounded text-sm">
                 @foreach ($paginationOptions as $value)
                     <option value="{{ $value }}">{{ $value }}</option>
                 @endforeach
             </select>
+
             @can('permission_delete')
                 <button
-                    class="text-blue-500 bg-transparent border border-blue-500 dark:border-zinc-300 hover:text-blue-700  active:bg-blue-600 font-bold uppercase text-xs p-3 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
-                    type="button" wire:click="confirm('deleteSelected')" wire:loading.attr="disabled"
-                    {{ $this->selectedCount ? '' : 'disabled' }}>
-                    {{__('Delete')}}
+                    wire:click="confirmDelete('deleteSelected')"
+                    wire:loading.attr="disabled"
+                    @if($selectedCount === 0) disabled @endif
+                    class="bg-red-600 text-white px-3 py-1 rounded disabled:opacity-50">
+                    {{ __('Delete Selected') }}
                 </button>
             @endcan
         </div>
-        <div class="lg:w-1/2 md:w-1/2 sm:w-full my-2 my-md-0">
-            <div class="my-2 my-md-0">
-                <input type="text" wire:model.debounce.300ms="search"
-                    class="p-3 leading-5 bg-white text-gray-700 rounded border border-zinc-300 mb-1 text-sm w-full focus:shadow-outline-blue focus:border-blue-500"
-                    placeholder="{{ __('Search') }}" />
-            </div>
+
+        <div class="lg:w-1/2 md:w-1/2 sm:w-full mt-2 md:mt-0">
+            <input type="text" wire:model.debounce.300ms="search"
+                class="w-full p-2 border border-gray-300 rounded"
+                placeholder="{{ __('Search') }}" />
         </div>
     </div>
-    <div wire:loading.delay>
-        Loading...
+
+    {{-- Loading indicator --}}
+    <div wire:loading.delay class="mb-2">
+        {{ __('Loading...') }}
     </div>
 
-    <x-table>
-        <x-slot name="thead">
-            <x-table.th>#</x-table.th>
-            <x-table.th sortable wire:click="sortBy('title')" :direction="$sorts['title'] ?? null">
-                {{ __('Title') }}
-                @include('components.table.sort', ['field' => 'title'])
-            </x-table.th>
-            <x-table.th>
-                {{ __('Actions') }}
-            </x-table.th>
-        </x-slot>
-        <x-table.tbody>
-            @forelse($permissions as $permission)
-                <x-table.tr>
-                    <x-table.td>
-                        <input type="checkbox" value="{{ $permission->id }}" wire:model="selected">
-                    </x-table.td>
-                    <x-table.td>
-                        {{ $permission->title }}
-                    </x-table.td>
-                    <x-table.td>
-                        <div class="inline-flex">
+    {{-- Table --}}
+    <table class="w-full border-collapse border border-gray-200 text-sm">
+        <thead>
+            <tr>
+                <th class="border border-gray-300 px-2 py-1">
+                    <input type="checkbox" wire:model="selected" value="" wire:click="$toggle('selected')" />
+                </th>
+                <th class="border border-gray-300 px-2 py-1 cursor-pointer" wire:click="sortBy('title')">
+                    {{ __('Title') }}
+                    @if(isset($sorts['title']))
+                        @if($sorts['title'] === 'asc')
+                            &uarr;
+                        @else
+                            &darr;
+                        @endif
+                    @endif
+                </th>
+                <th class="border border-gray-300 px-2 py-1">{{ __('Actions') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($permissions as $permission)
+                <tr>
+                    <td class="border border-gray-300 text-center">
+                        <input type="checkbox" value="{{ $permission->id }}" wire:model="selected" />
+                    </td>
+                    <td class="border border-gray-300 px-2 py-1">{{ $permission->title }}</td>
+                    <td class="border border-gray-300 px-2 py-1">
+                        <div class="flex gap-2">
                             @can('permission_show')
-                                <a class="font-bold border-transparent uppercase justify-center text-xs py-1 px-2 rounded shadow hover:shadow-md outline-none focus:outline-none focus:ring-2 focus:ring-offset-2 ease-linear transition-all duration-150 cursor-pointer text-white bg-blue-500 border-blue-800 hover:bg-blue-600 active:bg-blue-700 focus:ring-blue-300 mr-2"
-                                    href="{{ route('admin.permissions.show', $permission) }}">
-                                    <x-heroicon-o-eye class="h-4 w-4" />
-                                </a>
+                                <a href="{{ route('admin.permissions.show', $permission) }}"
+                                    class="text-blue-600 hover:underline">{{ __('View') }}</a>
                             @endcan
                             @can('permission_edit')
-                                <a class="font-bold border-transparent uppercase justify-center text-xs py-1 px-2 rounded shadow hover:shadow-md outline-none focus:outline-none focus:ring-2 focus:ring-offset-2 mr-1 ease-linear transition-all duration-150 cursor-pointer text-white bg-green-500 border-green-800 hover:bg-green-600 active:bg-green-700 focus:ring-green-300mr-2"
-                                    href="{{ route('admin.permissions.edit', $permission) }}">
-                                    {{__('Edit')}}
-                                </a>
+                                <a href="{{ route('admin.permissions.edit', $permission) }}"
+                                    class="text-green-600 hover:underline">{{ __('Edit') }}</a>
                             @endcan
                             @can('permission_delete')
                                 <button
-                                    class="font-bold border-transparent uppercase justify-center text-xs py-2 px-2 rounded shadow hover:shadow-md outline-none focus:outline-none focus:ring-2 focus:ring-offset-2 mr-1 ease-linear transition-all duration-150 cursor-pointer text-white bg-red-500 border-red-800 hover:bg-red-600 active:bg-red-700 focus:ring-red-300"
-                                    type="button" wire:click="confirm('delete', {{ $permission->id }})"
-                                    wire:loading.attr="disabled">
-                                    {{__('Delete')}}
+                                    wire:click="confirmDelete('delete', {{ $permission->id }})"
+                                    wire:loading.attr="disabled"
+                                    class="text-red-600 hover:underline">
+                                    {{ __('Delete') }}
                                 </button>
                             @endcan
                         </div>
-                    </x-table.td>
-                </x-table.tr>
+                    </td>
+                </tr>
             @empty
-                <x-table.tr>
-                    <x-table.td colspan="10" class="text-center">
-                        {{ __('No entries found.') }}
-                    </x-table.td>
-                </x-table.tr>
+                <tr>
+                    <td colspan="3" class="text-center py-4">{{ __('No entries found.') }}</td>
+                </tr>
             @endforelse
-        </x-table.tbody>
-    </x-table>
+        </tbody>
+    </table>
 
-    <div class="card-body">
-        <div class="pt-3">
-            @if ($this->selectedCount)
-                <p class="text-sm leading-5">
-                    <span class="font-medium">
-                        {{ $this->selectedCount }}
-                    </span>
-                    {{ __('Entries selected') }}
-                </p>
-            @endif
-            {{ $permissions->links() }}
-        </div>
+    {{-- Pagination --}}
+    <div class="mt-3">
+        {{ $permissions->links() }}
     </div>
-</div>
 
-@push('scripts')
-    <script>
-        Livewire.on('confirm', e => {
-            if (!confirm("{{ __('Are you sure') }}")) {
-                return
-            }
-            @this[e.callback](...e.argv)
-        });
-    </script>
-@endpush
+    {{-- Selected count --}}
+    @if ($selectedCount)
+        <p class="mt-2 text-sm">
+            {{ $selectedCount }} {{ __('entries selected') }}
+        </p>
+    @endif
+
+    {{-- SweetAlert Confirmation JS --}}
+    @push('scripts')
+        <script>
+            document.addEventListener('livewire:load', function () {
+                Livewire.on('confirmDelete', (action, id) => {
+                    Swal.fire({
+                        title: action === 'delete'
+                            ? '{{ __('Are you sure you want to delete this permission?') }}'
+                            : '{{ __('Are you sure you want to delete the selected permissions?') }}',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: '{{ __('Delete') }}',
+                        cancelButtonText: '{{ __('Cancel') }}'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (action === 'delete') {
+                                @this.call('delete');
+                            } else if (action === 'deleteSelected') {
+                                @this.call('deleteSelected');
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+    @endpush
+</div>

@@ -33,7 +33,7 @@ class Helpers
     public static function getActiveCategories()
     {
         return Category::active()
-            ->select('id', 'name')
+            ->select('id', 'name', 'name_translate')
             ->get();
     }
 
@@ -109,9 +109,9 @@ class Helpers
                 'verify_peer_name' => false,
             ],
         ];
-    
+
         $context = stream_context_create($opts);
-    
+
         $image = file_get_contents($image_url, false, $context);
         $name = Str::slug($productName).'-'.sprintf('%02d', 0).'.jpg';
         $path = public_path().'/images/products/'.$name;

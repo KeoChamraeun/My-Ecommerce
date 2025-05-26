@@ -14,6 +14,7 @@ use Livewire\WithFileUploads;
 use App\Models\Subcategory;
 use App\Models\Category;
 use App\Models\Language;
+use Illuminate\Support\Facades\Storage; // Add this import
 
 class Edit extends Component
 {
@@ -50,7 +51,6 @@ class Edit extends Component
         $this->editModal = true;
     }
 
-  
     public function update()
     {
         abort_if(Gate::denies('subcategory_update'), 403);
@@ -66,19 +66,17 @@ class Edit extends Component
 
             Storage::disk('local_files')->put('subcategories/'.$imageName, $img, 'public');
 
-            $this->brand->image = $imageName;
-
+            // Removed $this->brand->image = $imageName; as it seems to be a mistake
             $this->subcategory->image = $imageName;
         }
 
         $this->subcategory->save();
 
         $this->alert('success', __('Subcategory updated successfully'));
-        
-        $this->emit('refreshIndex');
-        
-        $this->editModal = false;
 
+        $this->emit('refreshIndex');
+
+        $this->editModal = false;
     }
 
     public function getCategoriesProperty()
@@ -95,5 +93,4 @@ class Edit extends Component
     {
         return view('livewire.admin.subcategory.edit');
     }
-
 }

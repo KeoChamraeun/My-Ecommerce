@@ -56,10 +56,18 @@
         [x-cloak] {
             display: none;
         }
-    </style>
+
+        body.khmer {
+            font-family: 'KhmerOSBattambang', sans-serif;
+        }
+        section.khmer {
+            font-family: 'KhmerOSBattambang', sans-serif;
+        }
+
+        </style>
 </head>
 
-<body     class="antialiased bg-gray-50 text-gray-800 font-{{ app()->getLocale() === 'kh' ? 'khmer' : 'sans' }}"
+<body     class="antialiased bg-gray-50 text-gray-800 khmer"
     x-data="{ showCart: false }"
 >
     <!-- Body Tags -->
@@ -68,7 +76,7 @@
         {!! Helpers::settings('body_tags') !!}
     @endif
 
-    <section class="relative">
+    <section class="relative khmer">
 
         <x-topheader />
 
