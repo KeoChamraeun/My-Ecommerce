@@ -36,13 +36,6 @@ return [
             'throw' => false,
         ],
 
-        'temporary_file_upload' => [
-            'disk' => 'local',
-            'rules' => null,
-            'directory' => 'livewire-tmp', // default folder name
-        ],
-
-
         'local_files' => [
             'driver' => 'local',
             'root' => public_path('images'),
