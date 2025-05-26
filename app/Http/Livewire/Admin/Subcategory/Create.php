@@ -20,19 +20,18 @@ class Create extends Component
     use LivewireAlert;
     use WithFileUploads;
 
-    public $createSubcategory;
+    public $createSubcategory = false;
 
     public $listeners = ['createSubcategory'];
 
-    public $subcategory;
+    public ?Subcategory $subcategory = null;
 
     public $image;
 
-    public array $rules = [
+    protected array $rules = [
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
-        'subcategory.language_id' => ['nullable'],
-        'image'                   => ['nullable', 'image', 'max:2048'], // Added image validation
+        'subcategory.language_id' => ['nullable', 'integer'],
     ];
 
     public function render(): View|Factory
@@ -45,7 +44,6 @@ class Create extends Component
     public function createSubcategory()
     {
         $this->resetErrorBag();
-
         $this->resetValidation();
 
         $this->subcategory = new Subcategory();
@@ -57,9 +55,10 @@ class Create extends Component
     {
         $this->validate();
 
-        if ($this->image instanceof \Livewire\TemporaryUploadedFile) {
-            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(3) . '.' . $this->image->extension();
-            $this->image->storeAs('subcategories', $imageName);
+        if ($this->image) {
+            // Store the image in the 'public' disk under 'subcategories' folder
+            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->extension();
+            $this->image->storeAs('subcategories', $imageName, 'public');
             $this->subcategory->image = $imageName;
         }
 
@@ -72,6 +71,10 @@ class Create extends Component
         $this->emit('refreshIndex');
 
         $this->createSubcategory = false;
+
+        // Reset form
+        $this->subcategory = null;
+        $this->image = null;
     }
 
     public function getCategoriesProperty()
