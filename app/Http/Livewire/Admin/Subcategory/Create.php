@@ -66,6 +66,7 @@ class Create extends Component
         $this->subcategory->slug = Str::slug($this->subcategory->name);
 
         $this->subcategory->save();
+        dd($this->subcategory);
 
         $this->alert('success', __('Subcategory created successfully.'));
 
