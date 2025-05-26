@@ -30,7 +30,7 @@ class Create extends Component
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
         'subcategory.language_id' => ['nullable', 'integer'],
-        'image'                   => ['nullable', 'image', 'max:2048'], // Added validation for image
+        'image'                   => ['nullable', 'image', 'max:2048'],
     ];
 
     public function render(): View|Factory
@@ -57,13 +57,14 @@ class Create extends Component
     {
         $this->validate();
 
-        if ($this->image) {
+        $this->subcategory->slug = Str::slug($this->subcategory->name);
+
+        if ($this->image && $this->image->isValid()) {
             $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->getClientOriginalExtension();
             $path = $this->image->storeAs('subcategories', $imageName, 'public');
             $this->subcategory->image = $path;
         }
 
-        $this->subcategory->slug = Str::slug($this->subcategory->name);
         $this->subcategory->save();
 
         $this->alert('success', __('Subcategory created successfully.'));
@@ -73,7 +74,6 @@ class Create extends Component
         $this->subcategory = null;
         $this->image = null;
     }
-
 
     public function getCategoriesProperty()
     {

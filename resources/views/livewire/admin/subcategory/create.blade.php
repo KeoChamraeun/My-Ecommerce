@@ -11,7 +11,6 @@
 
             <form wire:submit.prevent="create">
                 <div class="flex flex-wrap space-y-4 px-4">
-
                     <div class="px-2 w-1/2 sm:w-full">
                         <x-label for="name" :value="__('Name')" />
                         <x-input id="name" class="block mt-1 w-full" type="text" wire:model.defer="subcategory.name" />
