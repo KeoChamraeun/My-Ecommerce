@@ -15,7 +15,6 @@ class ThankYou extends Component
 
     public function mount($order)
     {
-        // Eager load 'products' relation and other needed relations
         $this->order = Order::with(['products', 'user', 'address'])->findOrFail($order->id);
     }
 

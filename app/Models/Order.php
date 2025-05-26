@@ -7,8 +7,7 @@ namespace App\Models;
 use App\Support\HasAdvancedFilter;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\OrderStatus;
-use Faker\Provider\ar_EG\Address;
-use Google\Service\ShoppingContent\OrderTrackingSignal;
+use App\Models\Address;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -71,11 +70,6 @@ class Order extends Model
         return $this->hasMany(Notification::class, 'order_id');
     }
 
-    public function tracks()
-    {
-        return $this->hasMany(OrderTrackingSignal::class, 'order_id');
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -101,18 +95,15 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
-    // MANY-TO-MANY relationship to Products via pivot table 'order_products'
     public function products()
     {
         return $this->belongsToMany(Product::class, 'order_products')
-                    ->withPivot('qty', 'price') // Add any other pivot fields if needed
+                    ->withPivot('qty', 'price')
                     ->withTimestamps();
     }
 
-    // Optional: define address relation if you are accessing $order->address
     public function address()
     {
         return $this->belongsTo(Address::class, 'shipping_address_id');
-        // Adjust the foreign key as per your schema
     }
 }

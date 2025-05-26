@@ -45,7 +45,7 @@
                                                     <p class="text-gray-500">
                                                         <span>{{ __('Quantity') }}:</span>
                                                         <span class="text-gray-900 font-bold font-heading">
-                                                            {{ $product->pivot->quantity ?? 'N/A' }}
+                                                            {{ $product->pivot->qty ?? 'N/A' }}
                                                         </span>
                                                     </p>
                                                 </div>
@@ -106,7 +106,8 @@
                                             {{ $order->address->address }}
                                         </p>
                                         <p class="text-gray-500">{{ $order->address->city }} -
-                                            {{ $order->address->country }}</p>
+                                            {{ $order->address->country }}
+                                        </p>
                                     @else
                                         <p class="text-gray-500">{{ __('No address found.') }}</p>
                                     @endif
