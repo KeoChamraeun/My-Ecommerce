@@ -6,9 +6,9 @@
                     <div class="w-full lg:w-3/5 lg:pl-20 lg:ml-auto">
                         <h2 class="mb-8 text-5xl font-bold font-heading">{{ __('Thank you') }}
                             @if (!empty($order->user))
-                            {{ $order->user->fullName }}
+                                {{ $order->user->fullName }}
                             @endif
-                         </h2>
+                        </h2>
 
                         <p class="mb-12 text-gray-500">{{ __('Your order is processing') }}</p>
                         <div class="flex flex-wrap mb-12">
@@ -33,29 +33,37 @@
                                 <span class="ml-4">{{ __('View Invoice') }}</span>
                             </a>
                         </div>
+
                         <div class="mb-6 p-10 shadow-xl">
                             <div class="flex flex-wrap items-center -mx-4">
-                                @foreach ($order->products as $product)
-                                    <div class="w-full lg:w-2/6 px-4 mb-8 lg:mb-0">
-                                        <img class="w-full h-32 object-contain"
-                                            src="{{ asset('images/products/' . $product->image) }}" alt="">
-                                    </div>
-                                    <div class="w-full lg:w-4/6 px-4">
-                                        <div class="flex">
-                                            <div class="mr-auto">
-                                                <h3 class="text-xl font-bold font-heading">{{ $product->name }}</h3>
-                                                <p class="text-gray-500">{!! $product->description !!}</p>
-                                                <p class="text-gray-500">
-                                                    <span>{{ __('Quantity') }}:</span>
-                                                    <span class="text-gray-900 font-bold font-heading">{{ $order->quantity }}</span>
-                                                </p>
-                                            </div>
-                                            <span class="text-2xl font-bold font-heading text-blue-300">{{ $product->price }}
-                                                DH</span>
+                                @if ($order->products && $order->products->count())
+                                    @foreach ($order->products as $product)
+                                        <div class="w-full lg:w-2/6 px-4 mb-8 lg:mb-0">
+                                            <img class="w-full h-32 object-contain"
+                                                src="{{ asset('images/products/' . $product->image) }}" alt="">
                                         </div>
-                                    </div>
+                                        <div class="w-full lg:w-4/6 px-4">
+                                            <div class="flex">
+                                                <div class="mr-auto">
+                                                    <h3 class="text-xl font-bold font-heading">{{ $product->name }}</h3>
+                                                    <p class="text-gray-500">{!! $product->description !!}</p>
+                                                    <p class="text-gray-500">
+                                                        <span>{{ __('Quantity') }}:</span>
+                                                        <span class="text-gray-900 font-bold font-heading">
+                                                            {{ $product->pivot->quantity ?? 'N/A' }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <span class="text-2xl font-bold font-heading text-blue-300">
+                                                    {{ $product->pivot->price ?? $product->price }} DH
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p>{{ __('No products found for this order.') }}</p>
+                                @endif
                             </div>
-                            @endforeach
                         </div>
 
                         <div class="mb-10">
@@ -93,6 +101,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="mb-10 py-10 px-4 bg-gray-100">
                             <div class="flex flex-wrap justify-around -mx-4">
                                 <div class="w-full md:w-auto px-4 mb-6 md:mb-0">
@@ -100,8 +109,8 @@
                                     <p class="text-gray-500">
                                         {{ $order->address->address }}
                                     </p>
-                                    <p class="text-gray-500">{{ $order->address->city }} - {{ $order->address->country }}
-                                    </p>
+                                    <p class="text-gray-500">{{ $order->address->city }} -
+                                        {{ $order->address->country }}</p>
                                 </div>
                                 <div class="w-full md:w-auto px-4 mb-6 md:mb-0">
                                     <h4 class="mb-6 font-bold font-heading">{{ __('Shipping informations') }}</h4>
@@ -112,9 +121,9 @@
                                         {{ $order->user->phone }}
                                     </p>
                                 </div>
-
                             </div>
                         </div>
+
                         <a class="block text-center px-8 py-4 bg-red-500 hover:bg-red-700 text-white font-bold font-heading uppercase rounded-md transition duration-200"
                             href="{{ route('front.home') }}">
                             {{ __('Go back Shopping') }}

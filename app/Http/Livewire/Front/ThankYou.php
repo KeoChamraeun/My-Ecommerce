@@ -11,13 +11,12 @@ use Livewire\Component;
 
 class ThankYou extends Component
 {
-    //  show order details on thank you page
-
     public $order;
 
     public function mount($order)
     {
-        $this->order = Order::findOrFail($order->id);
+        // Eager load 'products' relation to avoid null in Blade
+        $this->order = Order::with('products')->findOrFail($order->id);
     }
 
     public function render(): View|Factory
