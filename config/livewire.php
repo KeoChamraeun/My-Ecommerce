@@ -96,16 +96,16 @@ return [
     */
 
     'temporary_file_upload' => [
-        'disk' => 'local_files',        // Example: 'local', 's3'              Default: 'default'
-        'rules' => null,       // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
-        'directory' => 'livewire-tmp', // default folder name
-        'middleware' => null,  // Example: 'throttle:5,1'             Default: 'throttle:60,1'
-        'preview_mimes' => [   // Supported file types for temporary pre-signed file URLs.
+        'disk' => 'local',              // Change from 'local_files' to 'local'
+        'rules' => null,
+        'directory' => 'livewire-tmp',
+        'middleware' => null,
+        'preview_mimes' => [
             'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
             'mov', 'avi', 'wmv', 'mp3', 'm4a',
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
         ],
-        'max_upload_time' => 5, // Max duration (in minutes) before an upload gets invalidated.
+        'max_upload_time' => 5,
     ],
 
     /*
