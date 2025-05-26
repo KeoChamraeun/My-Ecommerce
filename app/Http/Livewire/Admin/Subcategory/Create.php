@@ -10,6 +10,7 @@ use App\Models\Subcategory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -57,12 +58,27 @@ class Create extends Component
     {
         $this->validate();
 
+        Log::info('Create method called', [
+            'image_exists' => !empty($this->image),
+            'image_type' => is_object($this->image) ? get_class($this->image) : 'null',
+            'image_valid' => $this->image instanceof \Livewire\TemporaryUploadedFile ? $this->image->isValid() : false,
+        ]);
+
         $this->subcategory->slug = Str::slug($this->subcategory->name);
 
-        if ($this->image && $this->image->isValid()) {
+        if ($this->image instanceof \Livewire\TemporaryUploadedFile && $this->image->isValid()) {
             $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->getClientOriginalExtension();
-            $path = $this->image->storeAs('subcategories', $imageName, 'public');
-            $this->subcategory->image = $path;
+            try {
+                $path = $this->image->storeAs('subcategories', $imageName, 'public');
+                $this->subcategory->image = $path;
+                Log::info('Image stored successfully', ['path' => $path]);
+            } catch (\Exception $e) {
+                Log::error('Failed to store image', ['error' => $e->getMessage()]);
+                $this->alert('error', __('Failed to store image.'));
+                return;
+            }
+        } else {
+            Log::info('No valid image uploaded');
         }
 
         $this->subcategory->save();

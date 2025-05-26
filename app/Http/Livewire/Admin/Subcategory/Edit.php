@@ -10,7 +10,10 @@ use App\Models\Subcategory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -59,10 +62,27 @@ class Edit extends Component
 
         $this->subcategory->slug = Str::slug($this->subcategory->name);
 
-        if ($this->image && $this->image->isValid()) {
-            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->getClientOriginalExtension();
-            $path = $this->image->storeAs('subcategories', $imageName, 'public');
-            $this->subcategory->image = $path;
+        if ($this->image instanceof \Livewire\TemporaryUploadedFile && $this->image->isValid()) {
+            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.webp';
+
+            try {
+                // Use Intervention Image to encode as webp
+                $image = Image::make($this->image->get())->encode('webp', 85);
+
+                $path = 'subcategories/' . $imageName;
+
+                // Store the encoded image to the 'public' disk
+                Storage::disk('public')->put($path, $image);
+
+                $this->subcategory->image = $path;
+
+                Log::info('Image processed and stored', ['path' => $path]);
+
+            } catch (\Exception $e) {
+                Log::error('Failed to process/store image', ['error' => $e->getMessage()]);
+                $this->alert('error', __('Failed to process image.'));
+                return;
+            }
         }
 
         $this->subcategory->save();
@@ -70,6 +90,7 @@ class Edit extends Component
         $this->alert('success', __('Subcategory updated successfully.'));
         $this->emit('refreshIndex');
 
+        // Reset the modal
         $this->editSubcategory = false;
         $this->subcategory = null;
         $this->image = null;
