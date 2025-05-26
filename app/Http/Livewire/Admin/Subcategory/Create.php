@@ -25,13 +25,14 @@ class Create extends Component
     public $listeners = ['createSubcategory'];
 
     public $subcategory;
-    
+
     public $image;
-    
+
     public array $rules = [
         'subcategory.name'        => ['required', 'string', 'max:255'],
         'subcategory.category_id' => ['nullable', 'integer'],
         'subcategory.language_id' => ['nullable'],
+        'image'                   => ['nullable', 'image', 'max:2048'], // Added image validation
     ];
 
     public function render(): View|Factory
@@ -56,8 +57,8 @@ class Create extends Component
     {
         $this->validate();
 
-        if ($this->image) {
-            $imageName = Str::slug($this->subcategory->name).'-'.Str::random(3).'.'.$this->image->extension();
+        if ($this->image instanceof \Livewire\TemporaryUploadedFile) {
+            $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(3) . '.' . $this->image->extension();
             $this->image->storeAs('subcategories', $imageName);
             $this->subcategory->image = $imageName;
         }
