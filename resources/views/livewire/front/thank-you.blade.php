@@ -4,12 +4,12 @@
             <div class="mx-auto px-4">
                 <div class="flex items-end justify-end">
                     <div class="w-full lg:w-3/5 lg:pl-20 lg:ml-auto">
-                        <h2 class="mb-8 text-5xl font-bold font-heading">{{ __('Thank you') }} 
+                        <h2 class="mb-8 text-5xl font-bold font-heading">{{ __('Thank you') }}
                             @if (!empty($order->user))
                             {{ $order->user->fullName }}
                             @endif
                          </h2>
-                         
+
                         <p class="mb-12 text-gray-500">{{ __('Your order is processing') }}</p>
                         <div class="flex flex-wrap mb-12">
                             <div class="mr-20">
@@ -35,7 +35,6 @@
                         </div>
                         <div class="mb-6 p-10 shadow-xl">
                             <div class="flex flex-wrap items-center -mx-4">
-                                @dd($order->products)
                                 @foreach ($order->products as $product)
                                     <div class="w-full lg:w-2/6 px-4 mb-8 lg:mb-0">
                                         <img class="w-full h-32 object-contain"
