@@ -57,7 +57,7 @@ class Create extends Component
     {
         $this->validate();
 
-        if ($this->image !== null && $this->image->getRealPath()) {
+        if ($this->image) {
             $imageName = Str::slug($this->subcategory->name) . '-' . Str::random(6) . '.' . $this->image->getClientOriginalExtension();
             $path = $this->image->storeAs('subcategories', $imageName, 'public');
             $this->subcategory->image = $path;
@@ -73,6 +73,7 @@ class Create extends Component
         $this->subcategory = null;
         $this->image = null;
     }
+
 
     public function getCategoriesProperty()
     {

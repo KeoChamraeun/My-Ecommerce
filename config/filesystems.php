@@ -46,10 +46,10 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
-            'throw' => false,
         ],
+
 
         's3' => [
             'driver' => 's3',
@@ -71,7 +71,7 @@ return [
             'folder' => env('GOOGLE_DRIVE_BACKUP_FOLDER'), // without folder is root of drive or team drive
             //'teamDriveId' => env('GOOGLE_DRIVE_TEAM_DRIVE_ID'),
         ],
-      
+
         'google_backups' => [
             'driver' => 'google',
             'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
