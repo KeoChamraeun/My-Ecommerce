@@ -26,7 +26,7 @@ class Index extends Component
 
     public array $selected = [];
 
-    public array $paginationOptions;
+    public array $paginationOptions = [10, 25, 50, 100];
 
     public array $listsForFields = [];
 
@@ -42,33 +42,33 @@ class Index extends Component
         ],
     ];
 
-    public function getSelectedCountProperty()
+    public function getSelectedCountProperty(): int
     {
         return count($this->selected);
     }
 
-    public function updatingSearch()
+    public function updatingSearch(): void
     {
         $this->resetPage();
     }
 
-    public function updatingPerPage()
+    public function updatingPerPage(): void
     {
         $this->resetPage();
     }
 
-    public function resetSelected()
+    public function resetSelected(): void
     {
         $this->selected = [];
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->sortBy = 'id';
         $this->sortDirection = 'desc';
         $this->perPage = 25;
         $this->paginationOptions = [25, 50, 100];
-        $this->orderable = (new Order())->orderable;
+        $this->orderable = (new Order())->orderable ?? ['id', 'status', 'total_qty', 'total_cost'];
     }
 
     public function render(): View|Factory
@@ -81,6 +81,9 @@ class Index extends Component
 
         $orders = $query->paginate($this->perPage);
 
-        return view('livewire.admin.order.index', compact('orders'));
+        return view('livewire.admin.order.index', [
+            'orders' => $orders,
+            'paginationOptions' => $this->paginationOptions,
+        ]);
     }
 }

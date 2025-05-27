@@ -37,48 +37,75 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'role:ADMIN', 'firewall.all']], function () {
-    // change lang
+    // Change language
     Route::get('/lang/{lang}', [DashboardController::class, 'changeLanguage'])->name('changelanguage');
 
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Categories and Subcategories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/subcategories', [CategoryController::class, 'subcategories'])->name('subcategories');
+
+    // Brands
     Route::get('/brands', [BrandController::class, 'index'])->name('brands');
+
+    // Products
     Route::get('/products', [ProductController::class, 'index'])->name('products');
 
+    // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+    Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
+    // Users
     Route::get('/users', [UsersController::class, 'index'])->name('users');
 
+    // Sections
     Route::get('/sections', [SectionController::class, 'index'])->name('sections');
     Route::get('/section/create', [SectionController::class, 'create'])->name('section.create');
     Route::get('/section/edit/{id}', [SectionController::class, 'edit'])->name('section.edit');
 
+    // Featured Banners
     Route::get('/featuredBanners', [FeaturedBannerController::class, 'index'])->name('featuredBanners');
+
+    // Pages
     Route::get('/pages', [PageController::class, 'index'])->name('pages');
     Route::get('/order-forms', [PageController::class, 'orderForms'])->name('orderforms');
     Route::get('/page/settings', [PageController::class, 'settings'])->name('page.settings');
 
+    // Sliders
     Route::get('/sliders', [SliderController::class, 'index'])->name('sliders');
 
+    // Blogs
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
     Route::get('/blog/category', [BlogCategoryController::class, 'index'])->name('blogcategories');
 
+    // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::get('/backup', BackupIndex::class)->name('setting.backup');
     Route::get('/shipping', [ShippingController::class, 'index'])->name('setting.shipping');
     Route::get('/popupsettings', [SettingController::class, 'popupsettings'])->name('setting.popupsettings');
     Route::get('/redirects', [SettingController::class, 'redirects'])->name('setting.redirects');
 
+    // Reports
     Route::get('/report', [ReportController::class, 'index'])->name('report');
 
+    // Notifications
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
+
+    // SMTP
     Route::get('/smpt', [SmptController::class, 'index'])->name('smpt');
+
+    // Language
     Route::get('/language', [LanguageController::class, 'index'])->name('language');
+
+    // Roles and Permissions
     Route::get('/roles', [RolesController::class, 'index'])->name('roles');
     Route::get('/permissions', [UsersController::class, 'permissions'])->name('permissions');
-    Route::get('/currencies', [SettingController::class, 'currencies'])->name('currencies');
     Route::get('/permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show');
 
+    // Currencies
+    Route::get('/currencies', [SettingController::class, 'currencies'])->name('currencies');
 });
