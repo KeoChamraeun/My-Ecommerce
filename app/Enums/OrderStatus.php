@@ -22,4 +22,19 @@ enum OrderStatus: string
             self::CANCELED->value   => 'Canceled',
         ];
     }
+
+    public static function getValues(): array
+    {
+        return array_map(fn(self $case) => $case->value, self::cases());
+    }
+
+    public function label(): string
+    {
+        return self::labels()[$this->value];
+    }
+
+    public function translatedLabel(): string
+    {
+        return __('status.' . $this->value);
+    }
 }
