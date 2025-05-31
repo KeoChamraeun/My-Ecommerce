@@ -104,11 +104,11 @@
                                     <i class="fas fa-angle-double-down"></i>
                                 </button>
                             </x-slot>
-                            <x-dropdown-link href="{{ route('admin.orders.show', $order->id) }}">
+                            <x-dropdown-link href="{{ route('orders.show', $order->id) }}">
                                 <i class="fas fa-eye"></i> {{ __('View Details') }}
                             </x-dropdown-link>
                             
-                            <x-dropdown-link href="{{ route('admin.orders.edit', $order->id) }}">
+                            <x-dropdown-link href="{{ route('orders.edit', $order->id) }}">
                                 <i class="fas fa-edit"></i> {{ __('Edit') }}
                             </x-dropdown-link>                            
                             </x-slot>
