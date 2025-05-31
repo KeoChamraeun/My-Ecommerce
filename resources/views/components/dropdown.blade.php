@@ -56,9 +56,9 @@ switch ($width) {
             class="absolute right-0 z-50 mt-2 {{ $widthClasses }} rounded-md shadow-lg {{ $alignmentClasses }} overflow-y-auto"
             style="display: none;"
             @click="open = false">
-        <div class="rounded-md ring-1 ring-black ring-opacity-5 {{ $contentClasses }}">
-            {{ $content }}
-            {{ $slot }}
-        </div>
+            <div class="rounded-md ring-1 ring-black ring-opacity-5 {{ $contentClasses }}">
+                {{-- Use either "content" or fallback to "slot" --}}
+                {{ $content ?? $slot }}
+            </div>
     </div>
 </div>
