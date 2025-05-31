@@ -52,8 +52,8 @@
                     </x-table.td>
                     <x-table.td class="overflow-hidden text-clip whitespace-pre" style="white-space: initial">
                         @if ($order->user_id == null)
-                            {{ $order->customer->name }} -
-                            {{ $order->customer->email }} -
+                            {{ $order->customer->name }}
+                            {{ $order->customer->email }}
                             {{ $order->customer->phone }}
                         @else
                             {{ $order->customer?->name }}
