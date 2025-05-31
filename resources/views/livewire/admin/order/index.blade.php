@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    
+
 
     <x-table>
         <x-slot name="thead">
@@ -61,7 +61,7 @@
                     </x-table.td>
                     <x-table.td>
                         @if ($order->status == \App\Enums\OrderStatus::PENDING)
-                        <span
+                            <span
                                 class="p-2 text-center leading-5 rounded border border-blue-300 mb-1 text-sm w-full focus:shadow-outline-blue focus:border-blue-500 bg-blue-500 text-white">
                                 {{ __('Pending') }}
                             </span>
@@ -104,13 +104,13 @@
                                     <i class="fas fa-angle-double-down"></i>
                                 </button>
                             </x-slot>
-                            <x-dropdown-link href="{{ route('orders.show', $order->id) }}">
+                            <x-dropdown-link href="{{ route('admin.orders.show', $order->id) }}">
                                 <i class="fas fa-eye"></i> {{ __('View Details') }}
                             </x-dropdown-link>
-                            
-                            <x-dropdown-link href="{{ route('orders.edit', $order->id) }}">
+
+                            <x-dropdown-link href="{{ route('admin.orders.edit', $order->id) }}">
                                 <i class="fas fa-edit"></i> {{ __('Edit') }}
-                            </x-dropdown-link>                            
+                            </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                     </x-table.td>
