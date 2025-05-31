@@ -14,10 +14,10 @@
                         <p><strong>{{ __('Customer Name') }}:</strong> {{ $order->customer?->name ?? 'Guest' }}</p>
                         <p><strong>{{ __('Email') }}:</strong> {{ $order->customer?->email ?? 'N/A' }}</p>
                         <p><strong>{{ __('Phone') }}:</strong> {{ $order->customer?->phone ?? 'N/A' }}</p>
-                        <p><strong>{{ __('Status') }}:</strong> {{ $order->status->translatedLabel() }}</p>
+                        <p><strong>{{ __('Status') }}:</strong> {{ $order->status }}</p>
                         <p><strong>{{ __('Total Quantity') }}:</strong> {{ $order->total_qty }}</p>
                         <p><strong>{{ __('Total Cost') }}:</strong> {{ number_format($order->total_cost, 2) }}</p>
-                    </div>                    
+                    </div>
 
                     <div class="mt-6 flex space-x-4">
                         <a href="{{ route('admin.orders.edit', $order) }}"
