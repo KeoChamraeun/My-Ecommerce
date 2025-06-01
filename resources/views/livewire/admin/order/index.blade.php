@@ -52,9 +52,9 @@
                     </x-table.td>
                     <x-table.td class="overflow-hidden text-clip whitespace-pre" style="white-space: initial">
                         @if ($order->user_id == null)
-                            {{ $order->customer->name }}
-                            {{ $order->customer->email }}
-                            {{ $order->customer->phone }}
+                            {{ $order->user->first_name }}
+                            {{ $order->user->email }}
+                            {{ $order->user->phone }}
                         @else
                             {{ $order->customer?->name }}
                         @endif
@@ -98,23 +98,24 @@
                     <x-table.td>
                         <x-dropdown
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-32 p-1">
-                    
+
                             <x-slot name="trigger">
-                                <button type="button" class="px-4 text-base font-semibold text-gray-500 hover:text-sky-800">
+                                <button type="button"
+                                    class="px-4 text-base font-semibold text-gray-500 hover:text-sky-800">
                                     <i class="fas fa-angle-double-down"></i>
                                 </button>
                             </x-slot>
-                    
+
                             <x-dropdown-link href="{{ route('admin.orders.show', $order->id) }}">
                                 <i class="fas fa-eye"></i> {{ __('View Details') }}
                             </x-dropdown-link>
-                    
+
                             <x-dropdown-link href="{{ route('admin.orders.edit', $order->id) }}">
                                 <i class="fas fa-edit"></i> {{ __('Edit') }}
                             </x-dropdown-link>
-                    
+
                         </x-dropdown>
-                    </x-table.td>                    
+                    </x-table.td>
                 </x-table.tr>
             @empty
                 <x-table.tr>

@@ -11,9 +11,9 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h3 class="text-lg font-medium mb-4">{{ __('Order') }} #{{ $order->id }}</h3>
                     <div class="grid grid-cols-1 gap-4">
-                        <p><strong>{{ __('Customer Name') }}:</strong> {{ $order->customer?->name ?? 'Guest' }}</p>
-                        <p><strong>{{ __('Email') }}:</strong> {{ $order->customer?->email ?? 'N/A' }}</p>
-                        <p><strong>{{ __('Phone') }}:</strong> {{ $order->customer?->phone ?? 'N/A' }}</p>
+                        <p><strong>{{ __('Customer Name') }}:</strong> {{ $order->user->first_name ?? 'Guest' }}</p>
+                        <p><strong>{{ __('Email') }}:</strong> {{ $order->user->email ?? 'N/A' }}</p>
+                        <p><strong>{{ __('Phone') }}:</strong> {{ $order->user->phone ?? 'N/A' }}</p>
                         <p><strong>{{ __('Status') }}:</strong> {{ $order->status }}</p>
                         <p><strong>{{ __('Total Quantity') }}:</strong> {{ $order->total_qty }}</p>
                         <p><strong>{{ __('Total Cost') }}:</strong> {{ number_format($order->total_cost, 2) }}</p>
